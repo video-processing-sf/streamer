@@ -1,35 +1,58 @@
 #include "shared_memory.h"
-#include "frame.h"
+#include <iostream>
+#include <cstring>
+#include <sys/ipc.h>
+#include <sys/shm.h>
 
 
 
 namespace streamer
 {
 
-
-SharedMemory::SharedMemory(unsigned int size)
+SharedMemory::SharedMemory(uint key, uint size)
+ : size_{size}
 {
-    this->allocateBuffer(size);
+    this->initBuffer(key, size);
 }
+
 
 SharedMemory::~SharedMemory()
 {
-    this->freeBuffer();
+    this->deinitBuffer();
 }
 
-void SharedMemory::allocateBuffer(unsigned int size)
+
+void SharedMemory::initBuffer(uint key, uint size)
 {
-    
+    int shmID = shmget(key, size, IPC_CREAT | 0666);
+
+    if (shmID == -1)
+    {
+        std::cerr << "Failed to create shared memory.\n";
+        return;
+    }
+
+    shmAddr_ = static_cast<char*>(shmat(shmID, nullptr, 0));
+    if (shmAddr_ == (void*)-1)
+        std::cerr << "Failed to attach to shared memory.\n";
 }
 
-void SharedMemory::freeBuffer()
-{
 
+void SharedMemory::deinitBuffer()
+{
+    shmdt(shmAddr_);
 }
 
-void SharedMemory::PushFrame(const std::shared_ptr<Frame> frame)
-{
 
+uint SharedMemory::GetSize() const
+{
+    return size_;
+}
+
+
+void SharedMemory::WriteData(data_ptr_t data)
+{
+    std::memcpy(shmAddr_, data, size_);
 }
 
 

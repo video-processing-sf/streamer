@@ -2,6 +2,10 @@
 #define STREAMER_SHARED_MEMORY_H_
 
 #include <memory>
+#include <mutex>
+#include <gst/gst.h>
+#include "types.h"
+
 
 
 namespace streamer
@@ -12,18 +16,22 @@ class Frame;
 class SharedMemory
 {
 public:
-    SharedMemory(unsigned int size);
+    SharedMemory(uint key, uint size);
     ~SharedMemory();
 
-    void PushFrame(const std::shared_ptr<Frame> frame);
-    
+    uint GetSize() const;
+
+    void WriteData(data_ptr_t data);
 
 protected:
-    void allocateBuffer(unsigned int size);
-    void freeBuffer();
+    void initBuffer(uint key, uint size);
+    void deinitBuffer();
 
 private:
-    unsigned int size_;
+    std::mutex mutex_;
+    char* shmAddr_;
+    uint size_;
+
 };
 
 
