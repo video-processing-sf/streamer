@@ -40,7 +40,7 @@ void SharedMemory::initBuffer(size_t key, size_t size)
 
 void SharedMemory::deinitBuffer()
 {
-    shmdt(shmAddr_);
+    shmdt(shmBuff_);
     shmctl(shmid, IPC_RMID, NULL);
 }
 
