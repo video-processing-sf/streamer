@@ -11,26 +11,35 @@
 namespace streamer
 {
 
+struct Buffer
+{
+    std::mutex mutex;
+    size_t size;
+    data_ptr_t data;
+}
+
+
 class Frame;
 
 class SharedMemory
 {
 public:
-    SharedMemory(uint key, uint size);
+    SharedMemory(size_t key, size_t size);
     ~SharedMemory();
 
-    uint GetSize() const;
+    size_t GetSize() const;
 
     void WriteData(data_ptr_t data);
 
 protected:
-    void initBuffer(uint key, uint size);
+    void initBuffer(size_t key, size_t size);
     void deinitBuffer();
 
 private:
     std::mutex mutex_;
-    char* shmAddr_;
-    uint size_;
+    Buffer* shmBuff_;
+    int shmID_;
+    size_t size_;
 
 };
 

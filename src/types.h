@@ -9,8 +9,7 @@ namespace streamer
 
 // aliases
 using data_ptr_t = unsigned char*;
-using uint = unsigned int;
-using res_t = std::pair<uint, uint>;
+using res_t = std::pair<size_t, size_t>;
 
 
 

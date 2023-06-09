@@ -9,7 +9,7 @@
 namespace streamer
 {
 
-SharedMemory::SharedMemory(uint key, uint size)
+SharedMemory::SharedMemory(size_t key, size_t size)
  : size_{size}
 {
     this->initBuffer(key, size);
@@ -22,18 +22,18 @@ SharedMemory::~SharedMemory()
 }
 
 
-void SharedMemory::initBuffer(uint key, uint size)
+void SharedMemory::initBuffer(size_t key, size_t size)
 {
-    int shmID = shmget(key, size, IPC_CREAT | 0666);
+    shmID_ = shmget(key, sizeof(Buffer) + size, IPC_CREAT | 0666);
 
-    if (shmID == -1)
+    if (shmID_ == -1)
     {
         std::cerr << "Failed to create shared memory.\n";
         return;
     }
 
-    shmAddr_ = static_cast<char*>(shmat(shmID, nullptr, 0));
-    if (shmAddr_ == (void*)-1)
+    shmBuff_ = static_cast<Buffer*>(shmat(shmID_, nullptr, 0));
+    if (shmBuff_ == /*cast*/-1)
         std::cerr << "Failed to attach to shared memory.\n";
 }
 
@@ -41,10 +41,11 @@ void SharedMemory::initBuffer(uint key, uint size)
 void SharedMemory::deinitBuffer()
 {
     shmdt(shmAddr_);
+    // RM shared mem
 }
 
 
-uint SharedMemory::GetSize() const
+size_t SharedMemory::GetSize() const
 {
     return size_;
 }

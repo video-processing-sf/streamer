@@ -7,7 +7,7 @@
 namespace streamer
 {
 
-CSICamera::CSICamera(res_t resolution, const std::string& format, uint frame_rate)
+CSICamera::CSICamera(res_t resolution, const std::string& format, size_t frame_rate)
  : resolution_{resolution}, pixelFormat_{format}, frameRate_{frame_rate}
 {
 }
@@ -18,7 +18,7 @@ CSICamera::~CSICamera()
 }
 
 
-uint CSICamera::GetFrameSize() const
+size_t CSICamera::GetFrameSize() const
 {
     auto bytesPerPixel = GetBytesPerPixel(pixelFormat_);
 
@@ -56,13 +56,13 @@ std::string CSICamera::GetPixelFormat() const
 }
 
 
-void CSICamera::SetFrameRate(uint rate)
+void CSICamera::SetFrameRate(size_t rate)
 {
     frameRate_ = rate;
 }
 
 
-uint CSICamera::GetFrameRate() const
+size_t CSICamera::GetFrameRate() const
 {
     return frameRate_;
 }

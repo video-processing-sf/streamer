@@ -13,10 +13,10 @@ namespace streamer
 class CSICamera
 {
 public:
-    CSICamera(res_t resolution, const std::string& format, uint frame_rate);
+    CSICamera(res_t resolution, const std::string& format, size_t frame_rate);
     ~CSICamera();
 
-    uint GetFrameSize() const;
+    size_t GetFrameSize() const;
 
     void SetResolution(res_t resolution);
     res_t GetResolution() const;
@@ -24,15 +24,15 @@ public:
     void SetPixelFormat(const std::string& format);
     std::string GetPixelFormat() const;
 
-    void SetFrameRate(uint rate);
-    uint GetFrameRate() const;
+    void SetFrameRate(size_t rate);
+    size_t GetFrameRate() const;
 
     static std::optional<double> GetBytesPerPixel(const std::string& pixel_format);
 
 private:
     res_t resolution_;
     std::string pixelFormat_;
-    uint frameRate_;
+    size_t frameRate_;
 
 };
 
