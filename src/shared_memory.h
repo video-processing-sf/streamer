@@ -36,7 +36,6 @@ protected:
     void deinitBuffer();
 
 private:
-    std::mutex mutex_;
     Buffer* shmBuff_;
     int shmID_;
     size_t size_;
