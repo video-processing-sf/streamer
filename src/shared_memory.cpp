@@ -33,7 +33,7 @@ void SharedMemory::initBuffer(size_t key, size_t size)
     }
 
     shmBuff_ = static_cast<Buffer*>(shmat(shmID_, nullptr, 0));
-    if (shmBuff_ == /*cast*/-1)
+    if (shmBuff_ == reinterpret_cast<Buffer*>(-1))
         std::cerr << "Failed to attach to shared memory.\n";
 }
 
@@ -41,7 +41,7 @@ void SharedMemory::initBuffer(size_t key, size_t size)
 void SharedMemory::deinitBuffer()
 {
     shmdt(shmAddr_);
-    // RM shared mem
+    shmctl(shmid, IPC_RMID, NULL);
 }
 
 
