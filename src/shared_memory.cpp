@@ -53,7 +53,8 @@ size_t SharedMemory::GetSize() const
 
 void SharedMemory::WriteData(data_ptr_t data)
 {
-    std::memcpy(shmAddr_, data, size_);
+    std::lock_guard<std::shared_mutex> lock(shmBuff_->mutex);
+    std::memcpy(shmBuff_, data, size_);
 }
 
 

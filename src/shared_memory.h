@@ -2,7 +2,7 @@
 #define STREAMER_SHARED_MEMORY_H_
 
 #include <memory>
-#include <mutex>
+#include <shared_mutex>
 #include <gst/gst.h>
 #include "types.h"
 
@@ -13,7 +13,7 @@ namespace streamer
 
 struct Buffer
 {
-    std::mutex mutex;
+    std::shared_mutex mutex;
     size_t size;
     data_ptr_t data;
 }
